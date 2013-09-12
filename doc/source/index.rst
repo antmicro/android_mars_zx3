@@ -1,5 +1,5 @@
-Mars ZX3 Android manual
-=======================
+|project|
+=========
 
 .. toctree::
    :maxdepth: 2

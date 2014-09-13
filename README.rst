@@ -1,7 +1,7 @@
 Android for Enclustra Zynq Mars ZX3
 ===================================
 
-This is a port of the Android 4.1.2 operating system for `Enclustra's Mars ZX3 Zynq module <http://www.enclustra.com/en/products/system-on-chip-modules/mars-zx3/>`_.
+This is a port of the Android 4.3.1 operating system for `Enclustra's Mars ZX3 Zynq module <http://www.enclustra.com/en/products/system-on-chip-modules/mars-zx3/>`_.
 
 The full documentation for the port can be acquired from the following links:
 

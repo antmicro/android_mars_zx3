@@ -1,7 +1,7 @@
 Introduction
 ============
 
-This is a compilation and usage manual for the Android 4.1.2 operating system for `Enclustra's Mars ZX3 Zynq module <http://www.enclustra.com/en/products/system-on-chip-modules/mars-zx3/>`_.
+This is a compilation and usage manual for the Android 4.3.1 operating system for `Enclustra's Mars ZX3 Zynq module <http://www.enclustra.com/en/products/system-on-chip-modules/mars-zx3/>`_.
 
 Acknowledgements
 ----------------
@@ -14,14 +14,18 @@ Version information
 .. csv-table::
    :header: Author,Content,Date,Version
 
-   Peter Gielda,Draft version,07.07.2013,0.1
-   Michael Gielda,Updated for Sphinx,08.07.2013,0.2
+   Peter Gielda,Draft version,07.07.2013,0.1.0
+   Michael Gielda,Updated for Sphinx,08.07.2013,0.2.0
    Sebastian Kramer,Typos; required packages; improvements,08.07.2013,0.2.1
+   Peter Gielda,Minor improvements,06.06.2014,0.2.2
+   Mariusz Glebocki,Updated to Android 4.3.1,03.09.2014,0.2.3
+   Michael Gielda,Corrections,12.09.2014,0.2.4
 
 Compiling the system
 ====================
 
-The port was prepared using Gentoo and Debian Linux environments. The procedures described here should also work on other systems, but if you detect any errors or ommissions please e-mail us at `contact@antmicro.com <mailto:contact@antmicro.com>`_.
+The port was prepared using Gentoo and Debian Linux environments.
+The procedures described here should also work on other systems, but if you detect any errors or ommissions please e-mail us at `contact@antmicro.com <mailto:contact@antmicro.com>`_.
 
 Prerequisites
 -------------
@@ -29,13 +33,14 @@ Prerequisites
 Toolchain
 ~~~~~~~~~
 
-The toolchain used to compile the port is Sourcery G++ Lite 2011.03-42, and can be obtained from `the Mentor Graphics website <https://sourcery.mentor.com/sgpp/lite/arm/portal/release1802>`_.
+The toolchain used to compile the kernel is Sourcery G++ Lite 2011.03-42, and can be obtained from `the Mentor Graphics website <https://sourcery.mentor.com/sgpp/lite/arm/portal/release1802>`_.
 
 When this was written, Sourcery G++ Lite was directly available without the need for logging in using a direct link:
 
 .. code-block:: bash
 
-   wget https://sourcery.mentor.com/sgpp/lite/arm/portal/package8736/public/arm-none-eabi/arm-2011.03-42-arm-none-eabi.bin
+   wget 'https://sourcery.mentor.com/sgpp/lite/arm/portal/package8736/public'\
+   '/arm-none-eabi/arm-2011.03-42-arm-none-eabi.bin'
    chmod +x arm-2011.03-42-arm-none-eabi.bin
    ./arm-2011.03-42-arm-none-eabi.bin
 
@@ -55,28 +60,32 @@ The ``repo`` tool, used to manipulate the Android git repositories, can be downl
 
    mkdir ~/bin
    PATH=~/bin:$PATH
-   curl https://dl-ssl.google.com/dl/googlesource/git-repo/repo > ~/bin/repo
+   curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
    chmod a+x ~/bin/repo
 
 Java
 ~~~~
 
-The Java JDK 1.6 is required for Android compilation. JDK 1.6 should be available in your system from the package manager, but it might require some effort to get it.
+The Java JDK 1.6 is required for Android compilation.
+Oracle JDK 1.6 installer might not be available in your system's package manager.
+In this case, get the latest version of the Java SE Development Kit from the `Oracle website <http://www.oracle.com/technetwork/java/javase/downloads/java-archive-downloads-javase6-419409.html>`_.
+In the file list accept the license and download the ``.bin`` file for your system (Linux x86 or Linux x86).
+This step requires logging in.
 
-For example on a 64-bit system running Debian 7.0 (Wheezy) you need to add the non-free repository from Debian 6.0 (Squeeze) and get the JDK from there (this is best done as root):
+Instructions to install the package named ``jdk-6u45-linux-x64.bin`` downloaded to the ``~/downloads`` directory are:
 
 .. code-block:: bash
 
-   su
-   echo "deb http://ftp.pl.debian.org/debian/ squeeze non-free" >> /etc/apt/sources.list
-   aptitude update
-   apt-get install sun-java6-jdk
-   update-java-alternatives -s java-6-sun
+   cd ~
+   chmod +x ~/downloads/jdk-6u45-linux-x64.bin
+   ~/downloads/jdk-6u45-linux-x64.bin
+
+The package is unpacked to the ``~/jdk1.6.0_45`` directory.
 
 Other packages
 ~~~~~~~~~~~~~~
 
-A number of other dependencies is also required, but these should be available from package managers on most systems without a problem - e.g. on Debian 7.0 (Wheezy) you can get them by typing:
+A number of other dependencies are also required, but these should be available from package managers on most systems without a problem - e.g. on Debian 7.0 (Wheezy) you can get them by typing:
 
 .. code-block:: bash
 
@@ -85,19 +94,17 @@ A number of other dependencies is also required, but these should be available f
 Building the Linux kernel
 -------------------------
 
-You will need to compile your Android-enabled kernel separately. You can base your configuration on the following file:
+You will need to compile your Android-enabled kernel separately.
+You can base your configuration on https://github.com/antmicro/enclustra_zynq_linux/raw/master/config_enclustra_android.
 
-https://github.com/antmicro/enclustra_zynq_linux/raw/master/config_enclustra_android
-
-To compile the 3.5 kernel from our repository:
+To compile the 3.13 kernel from our repository:
 
 .. code-block:: bash
 
    git clone https://github.com/antmicro/enclustra_zynq_linux.git
    cp config_enclustra_android .config
-   CROSS_COMPILE="arm-none-eabi-" ARCH=arm make uImage -jX
-   # set X to thread number, e.g. use -j8 if you have 4 cores with hyper-threading
-
+   CROSS_COMPILE="arm-none-eabi-" ARCH=arm make uImage -j$(nproc)
+   
 Getting the Android sources
 ---------------------------
 
@@ -105,8 +112,7 @@ The sources are fetched using the ``repo`` tool:
 
 .. code-block:: bash
 
-   repo init -u git://github.com/antmicro/android_mars_zx3 -b master \
-                                                      -m default.xml
+   repo init -u git://github.com/antmicro/android_mars_zx3 -b master
    repo sync -f # use -f to ignore fetch errors
 
 .. warning::
@@ -116,35 +122,139 @@ The sources are fetched using the ``repo`` tool:
 Building Android
 ----------------
 
-Android can now be compiled using your Java installation. Be sure to supply the correct path to the JDK.
+Android can now be compiled using your Java installation.
+Be sure to supply the correct path to the JDK.
 
 .. code-block:: bash
 
    source ./build/envsetup.sh
-   export ANDROID_JAVA_HOME=/usr/lib/jvm/java-1.6.0-openjdk-amd64
-   # valid on a 64-bit Debian 7.0 (Wheezy), replace with your path
+   export JAVA_HOME=$HOME/jdk1.6.0_45  # path to the JDK installed before
+   export ANDROID_JAVA_HOME=$JAVA_HOME
+   export PATH=$JAVA_HOME/bin:$PATH
    lunch mars_zx3-userdebug
-   make
+   make -j$(nproc)
 
-.. note::
+Additional boot files
+---------------------
 
-   While compiling Android, some error messages in the form of ``find: 'src': No such file or directory`` might appear, but they do not in any way impede the compilation process and can be ignored.
+To boot Android on the device, you will need some additional files:
 
-Uploading the system on a USB stick
-===================================
+* devicetree.dtb
+* system_top.bin
 
-If the compilation was successful, the rootfs is located in ``out/target/product/mars_zx3/root``.
-Two additional files also have to be present on the rootfs - ``out/target/product/mars_zx3/system.img`` and ``out/target/product/mars_zx3/userdata.img``.
-
-The following procedure will produce a USB stick ready to run Android on the ZX3 module:
+To download them, use command:
 
 .. code-block:: bash
 
-   mkfs.ext2 /dev/sdX1   # replace sdX1 with the partition you want to use
-   mkdir /tmp/android_rootfs
-   mount /dev/sdx1 /tmp/android_rootfs
-   cp -r out/target/product/mars_zx3/root/* /tmp/android_rootfs/
-   cp out/target/product/mars_zx3/system.img /tmp/android_rootfs/
-   cp out/target/product/mars_zx3/userdata.img /tmp/android_rootfs
-   umount /tmp/android_rootfs
+   git clone --depth 1 https://github.com/antmicro/boot_files_mars_zx3.git
 
+Creating an SD Card with the system
+===================================
+
+To boot Android on the device you have to use at least a 512 MB SD Card. The system needs four partitions: 
+
+* for the kernel image and related files (vfat, 32 MB)
+* root partition (ext4, 32 MB)
+* system (ext4, 256 MB)
+* data (ext4, 100 MB or more)
+
+The last partition, used to store user data and additional applications, will be formatted to take up the remaining space on the SD card.
+
+Preparing the card
+------------------
+
+.. warning::
+
+   All data on the card will be lost. :file:`/dev/sdX` below is used as the card device node.
+
+Insert the card into reader and create partitions with the following commands (lines beginning with a colon are typed inside the ``fdisk`` command prompt, without the colon):
+
+.. code-block:: bash
+
+   sudo fdisk /dev/sdX
+   : o [enter]
+   : n [enter] [enter] [enter] [enter] +32M [enter]
+   : n [enter] [enter] [enter] [enter] +32M [enter]
+   : n [enter] [enter] [enter] [enter] +256M [enter]
+   : n [enter] p [enter] [enter] [enter]
+   : w [enter]
+
+   mkfs.vfat -n BOOT /dev/sdX1
+   mkfs.ext4 -L root /dev/sdX2
+   mkfs.ext4 -L system /dev/sdX3
+   mkfs.ext4 -L data /dev/sdX4
+
+Copying files
+-------------
+
+.. note::
+
+   ``$KERNEL``, ``$ANDROID``, and ``$BOOTFILES`` used below are respectively: the kernel and Android sources main directories paths, and path to additional boot files (system_top.bin and devicetree.dtb)
+
+If the compilation was successful, the rootfs CPIO image is located at :file:`$ANDROID/out/target/product/mars_zx3/ramdisk.img`, and the system partition at :file:`$ANDROID/out/target/product/mars_zx3/system.img`.
+The compiled kernel image is at :file:`$KERNEL/arch/arm/boot/uImage`.
+
+To install files on the card, run the following commands as root:
+
+.. code-block:: bash
+
+   mkdir -p /mnt/android/{img,boot,root,system}
+   mount /dev/sdX1 /mnt/android/boot
+   mount /dev/sdX2 /mnt/android/root
+   mount /dev/sdX3 /mnt/android/system
+   mount -o loop $ANDROID/out/target/product/mars_zx3/system.img /mnt/android/img
+
+   cp $KERNEL/arch/arm/boot/{uImage} /mnt/android/boot
+   cp $BOOTFILES/{devicetree.dtb,system_top.bit} /mnt/android/boot
+
+   rsync -av /mnt/android/img/* /mnt/android/system
+   cd /mnt/android/root
+   gunzip -c $ANDROID/out/target/product/mars_zx3/ramdisk.img | cpio -i
+   chmod +x *.sh
+
+   cd /
+   umount /mnt/android/{img,boot,root,system}
+
+Booting
+=======
+
+To boot Android on the device you have to install U-Boot first.
+Sources and build instructions can be found at the `U-Boot website <http://www.denx.de/wiki/U-Boot>`_.
+
+U-Boot environment
+------------------
+
+After successfull U-Boot installation, connect the USB cable to the micro USB port and run a serial terminal program, for example ``picocom``:
+
+.. code-block:: bash
+   picocom -b 115200 /dev/ttyUSB0
+
+In the U-Boot command prompt type the following commands to set environment variables:
+
+.. code-block:: bash
+
+   setenv bootargs console=ttyPS0,115200 root=/dev/mmcblk0p2 rw rootwait earlyprintk
+   setenv bootcmd mmcinfo && fatload mmc 0 0x3000000 uImage && \
+   fatload mmc 0 0x2A00000 devicetree.dtb && \
+   fatload mmc 0 0x200000 system_top.bit && fpga loadb 0 0x200000 ${filesize} && \
+   bootm 0x3000000 - 0x2A00000
+   saveenv
+
+And to boot:
+
+.. code-block:: bash
+
+   boot
+
+Using a USB WiFi dongle
+=======================
+
+By default, only WiFi interfaces based on Atheros AR9271 are supported.
+Simply connect the dongle to the USB port and go to the Android settings, where you can turn on WiFi.
+
+Hints on adding support for other interfaces
+--------------------------------------------
+
+To use other interfaces, you have to turn on the required interface's driver in the kernel config, rebuild it, and optionally put its firmware in the ``etc/firmware`` directory on the system partition.
+For detailed information which driver and firmware to use, google for its name or ID, which can be obtained with the ``lsusb`` command.
+The `Linux Wireless <http://wireless.kernel.org/en/users/Drivers/>`_ page is a good place to start.

@@ -40,7 +40,7 @@ master_doc = 'index'
 project = u'Mars ZX3 Android manual'
 basic_filename = u'Mars-ZX3--Android--manual'
 authors = u'Antmicro'
-copyright = u'2013 - ' + authors
+copyright = u'2013-2014, ' + authors
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

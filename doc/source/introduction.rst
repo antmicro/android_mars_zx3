@@ -20,6 +20,7 @@ Version information
    Peter Gielda,Minor improvements,06.06.2014,0.2.2
    Mariusz Glebocki,Updated to Android 4.3.1,03.09.2014,0.2.3
    Michael Gielda,Corrections,12.09.2014,0.2.4
+   Michael Gielda,More info on U-Boot,19.09.2014,0.2.5
 
 Compiling the system
 ====================

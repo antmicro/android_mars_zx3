@@ -96,13 +96,15 @@ Building the Linux kernel
 -------------------------
 
 You will need to compile your Android-enabled kernel separately.
-You can base your configuration on https://github.com/antmicro/enclustra_zynq_linux/raw/master/config_enclustra_android.
+You can base your configuration on https://github.com/antmicro/linux-xlnx/raw/enclustra/config_enclustra_android.
 
 To compile the 3.13 kernel from our repository:
 
 .. code-block:: bash
 
-   git clone https://github.com/antmicro/enclustra_zynq_linux.git
+   git clone https://github.com/antmicro/linux-xlnx.git
+   git checkout enclustra
+   git checkout 50d61698dd365db7b9c02349d0b86707ffb5ca1f .
    cp config_enclustra_android .config
    CROSS_COMPILE="arm-none-eabi-" ARCH=arm make uImage -j$(nproc)
    

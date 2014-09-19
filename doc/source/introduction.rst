@@ -137,12 +137,12 @@ Be sure to supply the correct path to the JDK.
 Additional boot files
 ---------------------
 
-To boot Android on the device, you will need some additional files:
+To boot Android on the device, you will also need some additional files:
 
-* devicetree.dtb
-* system_top.bin
+* ``devicetree.dtb``
+* ``system_top.bit``
 
-To download them, use command:
+To download them, use the following command:
 
 .. code-block:: bash
 
@@ -218,13 +218,23 @@ To install files on the card, run the following commands as root:
 Booting
 =======
 
-To boot Android on the device you have to install U-Boot first.
-Sources and build instructions can be found at the `U-Boot website <http://www.denx.de/wiki/U-Boot>`_.
+U-Boot
+------
 
-U-Boot environment
-------------------
+To boot Android on Mars ZX3 you have to use a matching U-Boot bootloader.
 
-After successfull U-Boot installation, connect the USB cable to the micro USB port and run a serial terminal program, for example ``picocom``:
+The sources and compilation instructions can be found in the `ZX3 GitHub repository <https://github.com/antmicro/u-boot_mars_zx3>`_
+
+Additional information about the bootloader itself can be found at the `U-Boot website <http://www.denx.de/wiki/U-Boot>`_.
+
+.. note::
+
+   How to flash the Mars ZX3 module with a proper ``boot.bin`` file with the correct U-Boot is beyond the scope of this manual, but this only needs to be done once.
+
+Setting up the U-Boot environment
+---------------------------------
+
+Connect the USB cable to the micro USB port and run a serial terminal program, for example ``picocom``:
 
 .. code-block:: bash
    picocom -b 115200 /dev/ttyUSB0

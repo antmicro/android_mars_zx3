@@ -240,6 +240,7 @@ Setting up the U-Boot environment
 Connect the USB cable to the micro USB port and run a serial terminal program, for example ``picocom``:
 
 .. code-block:: bash
+
    picocom -b 115200 /dev/ttyUSB0
 
 In the U-Boot command prompt type the following commands to set environment variables:

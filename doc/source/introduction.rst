@@ -106,7 +106,7 @@ To compile the 3.13 kernel from our repository:
    git checkout enclustra
    git checkout 50d61698dd365db7b9c02349d0b86707ffb5ca1f .
    cp config_enclustra_android .config
-   CROSS_COMPILE="arm-none-eabi-" ARCH=arm make uImage -j$(nproc)
+   CROSS_COMPILE="arm-none-eabi-" LOADADDR=0x8000 ARCH=arm make uImage -j$(nproc)
    
 Getting the Android sources
 ---------------------------

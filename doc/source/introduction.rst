@@ -86,12 +86,17 @@ The package is unpacked to the ``~/jdk1.6.0_45`` directory.
 Other packages
 ~~~~~~~~~~~~~~
 
-A number of other dependencies are also required, but these should be available from package managers on most systems without a problem - e.g. on Debian 7.0 (Wheezy) you can get them by typing:
+A number of other dependencies are also required, but these should be available from package managers on most systems without a problem - e.g. on Ubuntu 12.04 you can get them by typing:
 
 .. code-block:: bash
 
-   sudo apt-get install lzop uboot-mkimage bison xsltproc zip flex
- 
+  sudo apt-get install git gnupg flex bison gperf build-essential \
+  zip curl libc6-dev libncurses5-dev:i386 x11proto-core-dev \
+  libx11-dev:i386 libreadline6-dev:i386 libgl1-mesa-glx:i386 \
+  libgl1-mesa-dev g++-multilib mingw32 tofrodos \
+  python-markdown libxml2-utils xsltproc zlib1g-dev:i386 \
+  u-boot-tools lzop 
+
 Building the Linux kernel
 -------------------------
 

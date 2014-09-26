@@ -22,6 +22,7 @@ Version information
    Michael Gielda,Corrections,12.09.2014,0.2.4
    Michael Gielda,More info on U-Boot,19.09.2014,0.2.5
    Peter Gielda,Changed list of packages and default OS to Ubuntu 12.04,26.09.2014,0.2.6
+   Peter Gielda,Git hashtag updated,26.09.2014,0.2.7
 
 Compiling the system
 ====================
@@ -110,7 +111,7 @@ To compile the 3.13 kernel from our repository:
 
    git clone https://github.com/antmicro/linux-xlnx.git
    git checkout enclustra
-   git checkout 50d61698dd365db7b9c02349d0b86707ffb5ca1f .
+   git checkout d66a0ec2f397a285365b339b1386f166c5285b2d .
    cp config_enclustra_android .config
    CROSS_COMPILE="arm-none-eabi-" LOADADDR=0x8000 ARCH=arm make uImage -j$(nproc)
    

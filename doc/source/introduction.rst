@@ -207,7 +207,7 @@ To install files on the card, run the following commands as root:
    mount /dev/sdX3 /mnt/android/system
    mount -o loop $ANDROID/out/target/product/mars_zx3/system.img /mnt/android/img
 
-   cp $KERNEL/arch/arm/boot/{uImage} /mnt/android/boot
+   cp $KERNEL/arch/arm/boot/uImage /mnt/android/boot
    cp $BOOTFILES/{devicetree.dtb,system_top.bit} /mnt/android/boot
 
    rsync -av /mnt/android/img/* /mnt/android/system

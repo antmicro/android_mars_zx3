@@ -87,7 +87,7 @@ The package is unpacked to the ``~/jdk1.6.0_45`` directory.
 Other packages
 ~~~~~~~~~~~~~~
 
-A number of other dependencies are also required, but these should be available from package managers on most systems without a problem - e.g. on Ubuntu 12.04 you can get them by typing:
+A number of other dependencies are also required, but these should be available from package managers on most systems without a problem - e.g. on 64-bit Ubuntu 12.04 you can get them by typing:
 
 .. code-block:: bash
 
